@@ -1,10 +1,8 @@
 package MineField;
 
-import tools.Publisher;
+import tools.Model;
 
-import java.io.Serializable;
-
-public class Field extends Publisher implements Serializable {
+public class Field extends Model {
     private static int size = 20;
     private Tile[][] field = new Tile[size][size];
     private boolean mineStatus = false; // default mine tile status

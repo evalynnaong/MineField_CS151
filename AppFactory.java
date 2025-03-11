@@ -1,10 +1,5 @@
 package tools;
 
-interface Model {
-}
-
-interface View {
-}
 
 interface Command {
     void execute();
@@ -13,7 +8,7 @@ interface Command {
 
 
 
-interface AppFactory {
+public interface AppFactory {
     Model makeModel();
     View makeView();
     String getTitle();
