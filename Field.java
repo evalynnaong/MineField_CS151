@@ -11,9 +11,10 @@ public class Field extends Model {
     public Field() {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                field[i][j] = new Tile(i, j, false); // initialize Mines to false
+                field[i][j] = new Tile(i, j, false, false); // initialize Mines to false
             }
         }
+        field[0][0].setStepStatus(true); // part of initializing the board; steps on 0,0
         MineDistributor.place(field, numMines);
         notifySubscribers("Field initialized");
     }
@@ -71,4 +72,14 @@ public class Field extends Model {
         changed(); // from Model, sets changed flag and fires changed event
     }
 
+    public int getSize() {return size;}
+
+    public Tile getTile(int x, int y) {
+        return field[x][y];
+    }
+
+    public int getAdjacentMines(int x, int y) {
+
+        return 0;
+    }
 }

@@ -9,8 +9,8 @@ public class MineDistributor extends Utilities {
         int minesDistr = 0;
 
         while (minesDistr < numMines) {
-            int x = rng.nextInt(21);
-            int y = rng.nextInt(21);
+            int x = rng.nextInt(20);
+            int y = rng.nextInt(20);
 
             if (!field[x][y].getMineStatus() && !(x==0 && y==0)) {
                 field[x][y].setMineStatus(true);

@@ -32,6 +32,5 @@ public class FieldFactory implements AppFactory {
 
     public Command makeEditCommand(Model field, String direction) { //needs work
         return new Move((Field) field, direction);
-
     }
 }
