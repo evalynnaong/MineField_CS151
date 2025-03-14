@@ -1,17 +1,10 @@
-package MineField;
-
-// from CS151 AppPanel.java model; needs to be rewritten
-
-
-import tools.AppFactory;
-import tools.Model;
-import tools.Subscriber;
-import tools.Utilities;
+package tools;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 // AppPanel is the MVC controller
 public class AppPanel extends JPanel implements Subscriber, ActionListener  {
@@ -38,7 +31,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
 
     public void display() { frame.setVisible(true); }
 
-    public void update() {  /* override in extensions if needed */ }
+    public void update(String message) {  repaint(); }
 
     public Model getModel() { return model; }
 
@@ -60,7 +53,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         result.add(fileMenu);
 
         JMenu editMenu =
-                Utilities.makeMenu("Edit", factory.getEditCommands(), this);
+                Utilities.makeMenu("Edit", new String[]{Arrays.toString(factory.getEditCommands())}, this);
         result.add(editMenu);
 
         JMenu helpMenu =

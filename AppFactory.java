@@ -1,19 +1,11 @@
 package tools;
 
-
-interface Command {
-    void execute();
-    void undo();
-}
-
-
-
 public interface AppFactory {
     Model makeModel();
-    View makeView();
+    View makeView(Model m);
     String getTitle();
     String getHelp();
     String about();
-    String getEditCommands();
-    Command makeEditCommand(String name);
+    String[] getEditCommands();
+    Command makeEditCommand(Model m, String name);
 }
