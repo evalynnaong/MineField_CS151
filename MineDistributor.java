@@ -1,0 +1,22 @@
+package MineField;
+
+import tools.Utilities;
+
+public class MineDistributor extends Utilities {
+    public static void place(Tile[][] field, int numMines) {
+        int r = field.length;
+        int c = field[0].length;
+        int minesDistr = 0;
+
+        while (minesDistr < numMines) {
+            int x = rng.nextInt(21);
+            int y = rng.nextInt(21);
+
+            if (!field[x][y].getMineStatus() && !(x==0 && y==0)) {
+                field[x][y].setMineStatus(true);
+                minesDistr++;
+            }
+        }
+
+    }
+}

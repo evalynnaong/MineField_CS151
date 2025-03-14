@@ -2,6 +2,14 @@ package MineField;
 
 import tools.View;
 
-public class FieldView extends View {
+import java.awt.*;
 
+public class FieldView extends View {
+    public FieldView (Field field) {
+        super(field);
+    }
+
+    public void paintComponent(Graphics gc) {
+
+    }
 }
