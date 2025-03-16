@@ -1,24 +1,12 @@
-package tools;
+package mvc;
 
-interface Model {
-}
-
-interface View {
-}
-
-interface Command {
-    void execute();
-    void undo();
-}
-
-
-
-interface AppFactory {
+public interface AppFactory {
     Model makeModel();
-    View makeView();
+    View makeView(Model m);
     String getTitle();
     String getHelp();
     String about();
-    String getEditCommands();
-    Command makeEditCommand(String name);
+    String[] getEditCommands();
+    Command makeEditCommand(Model m, String name);
 }
+
