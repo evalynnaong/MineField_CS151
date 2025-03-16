@@ -19,7 +19,7 @@ public class Field extends Model {
         // Initialize field with empty tiles
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                field[i][j] = new Tile(i, j, false, false);
+                field[i][j] = new Tile(i, j, false, false, 0);
             }
         }
 
@@ -32,9 +32,17 @@ public class Field extends Model {
             do {
                 x = rand.nextInt(size);
                 y = rand.nextInt(size);
-            } while (field[x][y].getMineStatus()); // Ensure we don't place a mine on an already mined tile
+            } while (field[y][x].getMineStatus()); // Ensure we don't place a mine on an already mined tile
 
-            field[x][y].setMineStatus(true);
+            field[y][x].setMineStatus(true);
+        }
+
+        // Count number of mines surrounding space
+        for (int x = 0; x < size; x++) {
+            for (int y = 0; y < size; y++) {
+                int n = countMines(x, y);
+                field[y][x].setNumMines(n);
+            }
         }
 
         notifySubscribers("Field initialized with " + totalMines + " mines.");
@@ -42,7 +50,7 @@ public class Field extends Model {
 
     public Tile getTile(int x, int y) {
         if (x >= 0 && x < size && y >= 0 && y < size) {
-            return field[x][y];
+            return field[y][x]; //field[row][col]
         }
         return null; // Handle out-of-bounds access safely
     }
@@ -82,5 +90,22 @@ public class Field extends Model {
 
     public int getPlayerX() { return playerX; }
     public int getPlayerY() { return playerY; }
+    public int getSize() { return size; }
+    public int countMines(int x, int y){
+        int count = 0;
+        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
 
+        for(int i = 0; i < 8; i++){
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+
+            if (nx >= 0 && y >= 0 && x < getSize() && y < getSize()){
+                if (getTile(x, y).getMineStatus()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 }
