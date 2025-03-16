@@ -7,7 +7,7 @@ import mvc.View;
 
 public class FieldFactory implements AppFactory {
 
-    public Model makeModel() {
+    public Field makeModel() {
         return new Field();
     }
 
@@ -33,7 +33,8 @@ public class FieldFactory implements AppFactory {
     }
 
     public String[] getEditCommands() {
-        return new String[] {"N", "S", "E", "W", "NE", "NW", "SE", "SW"};
+        String[] eComm = {"N", "S", "E", "W", "NE", "NW", "SE", "SW"};
+        return eComm;
     }
 
     public Command makeEditCommand(Model field, String direction) { //needs work

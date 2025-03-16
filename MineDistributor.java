@@ -1,5 +1,6 @@
-package mineField;
+/*
 
+import mineField.Tile;
 import mvc.Utilities;
 
 public class MineDistributor extends Utilities {
@@ -21,3 +22,4 @@ public class MineDistributor extends Utilities {
     }
 }
 
+*/

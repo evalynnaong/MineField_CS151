@@ -1,4 +1,4 @@
-package mineField;
+/*package mineField;
 
 public class Player {
     private int x, y;
@@ -14,3 +14,4 @@ public class Player {
     public void setY(int y) {this.y = y;}
 
 }
+*/

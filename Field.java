@@ -23,6 +23,9 @@ public class Field extends Model {
             }
         }
 
+        // step status of first step is true
+        field[0][0].setStepStatus(true);
+
         // Randomly place mines
         for (int i = 0; i < totalMines; i++) {
             int x, y;
@@ -64,8 +67,10 @@ public class Field extends Model {
             playerX = newX;
             playerY = newY;
 
+            field[playerY][playerX].setStepStatus(true);
+
             // Check for mine
-            if (field[playerX][playerY].getMineStatus()) {
+            if (field[playerY][playerX].getMineStatus()) {
                 gameOver = true;
                 notifySubscribers("Game Over! You hit a mine.");
                 return false;

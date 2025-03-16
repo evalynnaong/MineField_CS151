@@ -52,13 +52,17 @@ public class FieldView extends View {
         // Reset grid
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                tiles[i][j].setBackground(Color.DARK_GRAY);
+                if(field.getTile(i,j).getStepStatus()){
+                    tiles[i][j].setBackground(Color.LIGHT_GRAY);
+                } else {
+                    tiles[i][j].setBackground(Color.DARK_GRAY);
+                }
             }
         }
 
         // Highlight player position
-        int x = field.getPlayerX();
-        int y = field.getPlayerY();
+        int x = field.getPlayerY();
+        int y = field.getPlayerX();
         tiles[x][y].setBackground(Color.WHITE);
 
         // If game over, highlight mine
@@ -67,9 +71,10 @@ public class FieldView extends View {
             tiles[x][y].setBackground(Color.RED);
             JOptionPane.showMessageDialog(this, "Game Over! You hit a mine.");
         }
+        repaint();
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Field field = new Field();
 
         JFrame frame = new JFrame("Mine Field");
@@ -80,5 +85,5 @@ public class FieldView extends View {
         FieldView view = new FieldView(field);
         frame.add(view);
         frame.setVisible(true);
-    }
+    }*/
 }

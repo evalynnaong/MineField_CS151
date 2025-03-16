@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 // AppPanel is the MVC controller
 public class AppPanel extends JPanel implements Subscriber, ActionListener  {
@@ -21,6 +20,9 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
 
         // initialize fields here
         this.factory = factory;
+        this.model = factory.makeModel();
+        this.view = factory.makeView(model);
+        this.controlPanel = new JPanel();
 
         frame = new SafeFrame();
         Container cp = frame.getContentPane();
@@ -32,7 +34,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
 
     public void display() { frame.setVisible(true); }
 
-    public void update(String message) {  repaint(); }
+    public void update(String message) {  /* override in extensions if needed */ }
 
     public Model getModel() { return model; }
 
@@ -54,7 +56,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         result.add(fileMenu);
 
         JMenu editMenu =
-                Utilities.makeMenu("Edit", new String[]{Arrays.toString(factory.getEditCommands())}, this);
+                Utilities.makeMenu("Edit", factory.getEditCommands(), this);
         result.add(editMenu);
 
         JMenu helpMenu =
