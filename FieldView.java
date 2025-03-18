@@ -29,6 +29,10 @@ public class FieldView extends View {
                 minefieldPanel.add(tiles[i][j]);
             }
         }
+        int numMines = ((Field) field).countMines(0,0);
+        tiles[0][0].setText(String.valueOf(numMines));
+        tiles[0][0].setBorder(BorderFactory.createLineBorder(Color.white));
+        tiles[0][0].setBackground(Color.white);
         add(minefieldPanel, BorderLayout.CENTER);
     }
 
@@ -38,6 +42,7 @@ public class FieldView extends View {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 if(field.getTile(j,i).getStepStatus()){
+                    //int numMines = field.countMines(i,j);
                     tiles[i][j].setBackground(Color.LIGHT_GRAY);
                 } else {
                     tiles[i][j].setBackground(Color.DARK_GRAY);
@@ -48,6 +53,10 @@ public class FieldView extends View {
         // Highlight player position
         int x = field.getPlayerY();
         int y = field.getPlayerX();
+
+        int numMines = ((Field) field).countMines(x,y);
+        tiles[x][y].setText(String.valueOf(numMines));
+        tiles[x][y].setBorder(BorderFactory.createLineBorder(Color.white));
         tiles[x][y].setBackground(Color.WHITE);
 
         // If game over, highlight mine

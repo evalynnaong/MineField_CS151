@@ -100,8 +100,8 @@ public class Field extends Model {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            if (nx >= 0 && y >= 0 && x < getSize() && y < getSize()){
-                if (getTile(x, y).getMineStatus()) {
+            if (nx >= 0 && ny >= 0 && nx < getSize() && ny < getSize()){
+                if (getTile(nx, ny).getMineStatus()) {
                     count++;
                 }
             }
