@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class View extends JPanel implements Subscriber{
-    private Model model;
+    protected Model model;
 
     public View(Model model){
         this.model = model;
@@ -20,6 +20,7 @@ public class View extends JPanel implements Subscriber{
         model.unsubscribe(this);
         this.model = newModel;
         model.subscribe(this);
+
         repaint();
     }
 

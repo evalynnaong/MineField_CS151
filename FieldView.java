@@ -1,6 +1,5 @@
 package mineField;
 
-import mvc.KeyPad;
 import mvc.Model;
 import mvc.View;
 
@@ -15,15 +14,9 @@ public class FieldView extends View {
     public FieldView(Model field) {
         super(field);
         this.field = (Field) field;
-        field.subscribe(this::updateView); // Listen for game updates
 
         setLayout(new BorderLayout());
-
-
-        // Add movement buttons (KeyPad) on the left
-        KeyPad keyPad = new KeyPad();
-        keyPad.setMovementListener(this::handleMove);
-        add(keyPad, BorderLayout.WEST);
+        setPreferredSize(new Dimension(500, 500));
 
         // Create minefield grid panel
         JPanel minefieldPanel = new JPanel(new GridLayout(SIZE, SIZE));
@@ -37,22 +30,14 @@ public class FieldView extends View {
             }
         }
         add(minefieldPanel, BorderLayout.CENTER);
-
-        updateView("Game started");
     }
 
-    private void handleMove(String direction) {
-        boolean moved = field.movePlayer(direction);
-        if (moved) {
-            updateView("Moved " + direction);
-        }
-    }
-
-    private void updateView(String message) {
+    public void refresh() {
+        System.out.println("repaint being called");
         // Reset grid
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                if(field.getTile(i,j).getStepStatus()){
+                if(field.getTile(j,i).getStepStatus()){
                     tiles[i][j].setBackground(Color.LIGHT_GRAY);
                 } else {
                     tiles[i][j].setBackground(Color.DARK_GRAY);
@@ -71,19 +56,21 @@ public class FieldView extends View {
             tiles[x][y].setBackground(Color.RED);
             JOptionPane.showMessageDialog(this, "Game Over! You hit a mine.");
         }
-        repaint();
+
+        System.out.println("refresh working");
     }
 
-    /*public static void main(String[] args) {
-        Field field = new Field();
+    @Override
+    public void update(String message) {
+        System.out.println("update being caught");
+        refresh();
+    }
 
-        JFrame frame = new JFrame("Mine Field");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 500);
-        frame.setResizable(false);
-
-        FieldView view = new FieldView(field);
-        frame.add(view);
-        frame.setVisible(true);
+    /*@Override
+    public void paintComponent(Graphics gc) {
+        super.paintComponent(gc);
+        gc.setColor(Color.LIGHT_GRAY);
+        gc.fillRect(0, 0, getWidth(), getHeight()); // Background fill
     }*/
+
 }

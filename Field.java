@@ -32,16 +32,16 @@ public class Field extends Model {
             do {
                 x = rand.nextInt(size);
                 y = rand.nextInt(size);
-            } while (field[y][x].getMineStatus()); // Ensure we don't place a mine on an already mined tile
+            } while (field[x][y].getMineStatus()); // Ensure we don't place a mine on an already mined tile
 
-            field[y][x].setMineStatus(true);
+            field[x][y].setMineStatus(true);
         }
 
         // Count number of mines surrounding space
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 int n = countMines(x, y);
-                field[y][x].setNumMines(n);
+                field[x][y].setNumMines(n);
             }
         }
 
@@ -50,7 +50,7 @@ public class Field extends Model {
 
     public Tile getTile(int x, int y) {
         if (x >= 0 && x < size && y >= 0 && y < size) {
-            return field[y][x]; //field[row][col]
+            return field[x][y]; //field[row][col]
         }
         return null; // Handle out-of-bounds access safely
     }
@@ -75,10 +75,10 @@ public class Field extends Model {
             playerX = newX;
             playerY = newY;
 
-            field[playerY][playerX].setStepStatus(true);
+            field[playerX][playerY].setStepStatus(true);
 
             // Check for mine
-            if (field[playerY][playerX].getMineStatus()) {
+            if (field[playerX][playerY].getMineStatus()) {
                 gameOver = true;
                 notifySubscribers("Game Over! You hit a mine.");
                 return false;

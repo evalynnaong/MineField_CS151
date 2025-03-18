@@ -1,5 +1,5 @@
-package mvc;
-
+package mineField;
+/*
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -14,38 +14,6 @@ public class KeyPad extends JPanel implements ActionListener {
     JButton b6 = new JButton("SW");
     JButton b7 = new JButton("S");
     JButton b8 = new JButton("SE");
-
-    private void layout1() {
-        //add(display);
-        add(b1);
-        add(b2);
-        add(b3);
-        add(b4);
-        add(b5);
-        add(b6);
-        add(b7);
-        add(b8);
-    }
-
-    private void layout2() {
-
-        setLayout(new BorderLayout());
-        JPanel keys = new JPanel();
-        keys.setLayout(new GridLayout(4, 3));
-
-        keys.add(b1);
-        keys.add(b2);
-        keys.add(b3);
-        keys.add(b4);
-        keys.add(b5);
-        keys.add(b6);
-        keys.add(b7);
-        keys.add(b8);
-
-        //add(keys, "South");
-        add(keys, "Center");
-    }
-
 
     private void layout3() {
 
@@ -90,55 +58,30 @@ public class KeyPad extends JPanel implements ActionListener {
     }
 
     public void setListeners() {
-        b1.addActionListener(this);
-        b2.addActionListener(this);
-        b3.addActionListener(this);
-        b4.addActionListener(this);
-        b5.addActionListener(this);
-        b6.addActionListener(this);
-        b7.addActionListener(this);
-        b8.addActionListener(this);
-    }
 
-    // Define a functional interface for movement actions
-    public interface MovementListener {
-        void move(String direction);
-    }
-
-    private MovementListener movementListener; // Variable to hold the listener
-
-    // Method to set movement listener
-    public void setMovementListener(MovementListener listener) {
-        this.movementListener = listener;
+        b1.addActionListener(e -> new Move("N"));
+        b2.addActionListener(e -> new Move("S"));
+        b3.addActionListener(e -> new Move("E"));
+        b4.addActionListener(e -> new Move("W"));
+        b5.addActionListener(e -> new Move("NE"));
+        b6.addActionListener(e -> new Move("NW"));
+        b7.addActionListener(e -> new Move("SE"));
+        b8.addActionListener(e -> new Move("SW"));
     }
 
     public KeyPad() {
-        //layout1();
-        //layout2();
+
         layout3();
         setListeners();
 
-
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Container cp = frame.getContentPane();
-        cp.add(this);
-        frame.setTitle("Key Pad");
-        frame.setSize(500, 300);
-        frame.setVisible(true);
     }
 
     public static void main(String[] args) {
         KeyPad kp = new KeyPad();
     }
 
-
-    @Override
     public void actionPerformed(ActionEvent e) {
-        if (movementListener != null) {
-            movementListener.move(e.getActionCommand()); // Pass movement direction to the listener
-        }
+
     }
-
-
 }
+*/

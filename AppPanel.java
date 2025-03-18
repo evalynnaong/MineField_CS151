@@ -24,17 +24,37 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         this.view = factory.makeView(model);
         this.controlPanel = new JPanel();
 
+        this.setLayout(new BorderLayout());
+        this.add(controlPanel, BorderLayout.SOUTH);
+
+        //controlPanel.setPreferredSize(new Dimension(50,50));
+        controlPanel.setBackground(Color.CYAN);
+
+        this.add(view, BorderLayout.CENTER);
+
         frame = new SafeFrame();
         Container cp = frame.getContentPane();
         cp.add(this);
+
         frame.setJMenuBar(createMenuBar());
         frame.setTitle(factory.getTitle());
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+
+        this.revalidate();
+        this.repaint();
+        frame.setVisible(true);
+
     }
 
-    public void display() { frame.setVisible(true); }
+    public void display() {
+        frame.setVisible(true);
+        System.out.println("Components inside AppPanel:");
+        for (Component c : this.getComponents()) {
+            System.out.println(" - " + c.getClass().getSimpleName());
+        }
+    }
 
-    public void update(String message) {  /* override in extensions if needed */ }
+    public void update() {  /* override in extensions if needed */ }
 
     public Model getModel() { return model; }
 
@@ -46,6 +66,9 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         // view must also unsubscribe then resubscribe:
         view.setModel(this.model);
         model.changed();
+
+        this.revalidate();
+        this.repaint();
     }
 
     protected JMenuBar createMenuBar() {
@@ -78,6 +101,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
                 Model newModel = Utilities.open(model);
                 if (newModel != null) setModel(newModel);
             } else if (cmmd.equals("New")) {
+                System.out.println("Trying to make a new");
                 Utilities.saveChanges(model);
                 setModel(factory.makeModel());
                 // needed cuz setModel sets to true:
@@ -100,4 +124,6 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
     protected void handleException(Exception e) {
         Utilities.error(e);
     }
+
+    public void update(String message) {}
 }

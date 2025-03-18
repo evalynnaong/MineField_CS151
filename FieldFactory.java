@@ -15,9 +15,9 @@ public class FieldFactory implements AppFactory {
         return new FieldView((Field) m);
     }
 
-    public FieldView makeView(Field m) {
+    /*public FieldView makeView(Field m) {
         return new FieldView(m);
-    }
+    }*/
 
     public String getTitle() {
         return "Mine Field Game";
@@ -38,6 +38,6 @@ public class FieldFactory implements AppFactory {
     }
 
     public Command makeEditCommand(Model field, String direction) { //needs work
-        return new Move((Field) field, direction);
+        return new Move(field, direction);
     }
 }

@@ -11,7 +11,7 @@ public class CommandProcessor {
         command.execute();
     }
 
-    public void undoCommand() {
+    /*public void undoCommand() {
         command.undo();
-    }
+    }*/
 }
