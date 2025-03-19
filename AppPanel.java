@@ -13,8 +13,8 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
     protected View view;
     protected JPanel controlPanel;
     private JFrame frame;
-    public static int FRAME_WIDTH = 500;
-    public static int FRAME_HEIGHT = 300;
+    public static int FRAME_WIDTH = 650;
+    public static int FRAME_HEIGHT = 500;
 
     public AppPanel(AppFactory factory) {
 
@@ -23,29 +23,55 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         this.model = factory.makeModel();
         this.view = factory.makeView(model);
         this.controlPanel = new JPanel();
+        controlPanel.setLayout(new GridLayout(4,3));
+
+        this.setLayout(new BorderLayout());
+        this.add(controlPanel, BorderLayout.WEST);
+
+        //controlPanel.setPreferredSize(new Dimension(50,50));
+        controlPanel.setBackground(Color.CYAN);
+        this.add(view, BorderLayout.EAST);
 
         frame = new SafeFrame();
         Container cp = frame.getContentPane();
         cp.add(this);
+
         frame.setJMenuBar(createMenuBar());
         frame.setTitle(factory.getTitle());
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+
+        this.revalidate();
+        this.repaint();
+        frame.setVisible(true);
+
     }
 
-    public void display() { frame.setVisible(true); }
+    public void display() {
+        frame.setVisible(true);
+        System.out.println("Components inside AppPanel:");
+        for (Component c : this.getComponents()) {
+            System.out.println(" - " + c.getClass().getSimpleName());
+        }
+    }
 
-    public void update(String message) {  /* override in extensions if needed */ }
+    public void update() {  /* override in extensions if needed */ }
 
     public Model getModel() { return model; }
 
     // called by file/open and file/new
     public void setModel(Model newModel) {
+        System.out.println("setModel in appPanel')");
         this.model.unsubscribe(this);
         this.model = newModel;
         this.model.subscribe(this);
         // view must also unsubscribe then resubscribe:
-        view.setModel(this.model);
+        this.view.setModel(this.model);
         model.changed();
+
+        model.setUnsavedChanges(false);
+
+        //this.revalidate();
+        //this.repaint();
     }
 
     protected JMenuBar createMenuBar() {
@@ -78,6 +104,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
                 Model newModel = Utilities.open(model);
                 if (newModel != null) setModel(newModel);
             } else if (cmmd.equals("New")) {
+                System.out.println("Trying to make a new");
                 Utilities.saveChanges(model);
                 setModel(factory.makeModel());
                 // needed cuz setModel sets to true:
@@ -91,6 +118,8 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
                 Utilities.inform(factory.getHelp());
             } else { // must be from Edit menu
                 //???
+                Command a1 = this.factory.makeEditCommand(model, cmmd);
+                a1.execute();
             }
         } catch (Exception e) {
             handleException(e);
@@ -100,4 +129,6 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
     protected void handleException(Exception e) {
         Utilities.error(e);
     }
+
+    public void update(String message) {}
 }

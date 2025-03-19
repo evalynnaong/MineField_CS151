@@ -3,7 +3,7 @@ package mvc;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Publisher {
+public class Publisher extends Utilities{
     private List<Subscriber> subscribers = new ArrayList<>();
 
     public void subscribe(Subscriber subscriber) {

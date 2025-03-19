@@ -3,22 +3,22 @@ package mineField;
 
 import mvc.Model;
 
-import java.util.Random;
-
-public class Field extends Model {
+public class Field extends Model{
     private static final int size = 20;
     private Tile[][] field = new Tile[size][size];
-    private int playerX = 0, playerY = 0; // Player starts at (0,0)
+    private int playerX;
+    private int playerY; // Player starts at (0,0)
     public static int percentMined = 5; // % of tiles mined
     private boolean gameOver = false; // Track game state
 
     public Field() {
-        Random rand = new Random();
         int totalMines = (size * size * percentMined) / 100; // Determine number of mines
 
+        initPlayer();
+
         // Initialize field with empty tiles
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < size; i++) { //row
+            for (int j = 0; j < size; j++) { //col
                 field[i][j] = new Tile(i, j, false, false, 0);
             }
         }
@@ -30,8 +30,8 @@ public class Field extends Model {
         for (int i = 0; i < totalMines; i++) {
             int x, y;
             do {
-                x = rand.nextInt(size);
-                y = rand.nextInt(size);
+                x = rng.nextInt(size);
+                y = rng.nextInt(size);
             } while (field[y][x].getMineStatus()); // Ensure we don't place a mine on an already mined tile
 
             field[y][x].setMineStatus(true);
@@ -44,8 +44,6 @@ public class Field extends Model {
                 field[y][x].setNumMines(n);
             }
         }
-
-        notifySubscribers("Field initialized with " + totalMines + " mines.");
     }
 
     public Tile getTile(int x, int y) {
@@ -55,8 +53,10 @@ public class Field extends Model {
         return null; // Handle out-of-bounds access safely
     }
 
-    public boolean movePlayer(String direction) {
-        if (gameOver) return false;
+    public void movePlayer(String direction) throws Exception{ // doesn't need to return anything...
+        if (gameOver) {
+            throw new Exception("Game over! Start new.");
+        }
 
         int newX = playerX, newY = playerY;
         switch (direction) {
@@ -71,23 +71,36 @@ public class Field extends Model {
         }
 
         // Validate new position
-        if (newX >= 0 && newX < size && newY >= 0 && newY < size) {
+        if (newX == size-1 && newY == size-1){
             playerX = newX;
             playerY = newY;
 
             field[playerY][playerX].setStepStatus(true);
+            gameOver = true;
+            changed();
+            throw new Exception("Winner!");
+        }
+        else if (newX >= 0 && newX < size && newY >= 0 && newY < size) {
+            playerX = newX;
+            playerY = newY;
+
+            field[playerY][playerX].setStepStatus(true);
+            changed();
 
             // Check for mine
             if (field[playerY][playerX].getMineStatus()) {
                 gameOver = true;
-                notifySubscribers("Game Over! You hit a mine.");
-                return false;
+                throw new Exception("Game over");
             }
-            return true;
+        } else {
+            throw new Exception("Out of bounds");
         }
-        return false;
     }
 
+    public void initPlayer() {
+        this.playerX = 0;
+        this.playerY = 0;
+    }
     public int getPlayerX() { return playerX; }
     public int getPlayerY() { return playerY; }
     public int getSize() { return size; }
@@ -100,8 +113,8 @@ public class Field extends Model {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            if (nx >= 0 && y >= 0 && x < getSize() && y < getSize()){
-                if (getTile(x, y).getMineStatus()) {
+            if (nx >= 0 && ny >= 0 && nx < getSize() && ny < getSize()){
+                if (getTile(nx, ny).getMineStatus()) {
                     count++;
                 }
             }

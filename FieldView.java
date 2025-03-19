@@ -1,6 +1,5 @@
 package mineField;
 
-import mvc.KeyPad;
 import mvc.Model;
 import mvc.View;
 
@@ -12,23 +11,17 @@ public class FieldView extends View {
     private JLabel[][] tiles = new JLabel[SIZE][SIZE];
     private Field field;
 
-    public FieldView(Model field) {
-        super(field);
-        this.field = (Field) field;
-        field.subscribe(this::updateView); // Listen for game updates
+    public FieldView(Model m) {
+        super(m);
+        this.field = (Field) m;
 
         setLayout(new BorderLayout());
-
-
-        // Add movement buttons (KeyPad) on the left
-        KeyPad keyPad = new KeyPad();
-        keyPad.setMovementListener(this::handleMove);
-        add(keyPad, BorderLayout.WEST);
+        setPreferredSize(new Dimension(500, 500));
 
         // Create minefield grid panel
         JPanel minefieldPanel = new JPanel(new GridLayout(SIZE, SIZE));
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < SIZE; i++) { //row
+            for (int j = 0; j < SIZE; j++) { //col
                 tiles[i][j] = new JLabel("?", SwingConstants.CENTER);
                 tiles[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK));
                 tiles[i][j].setOpaque(true);
@@ -36,54 +29,84 @@ public class FieldView extends View {
                 minefieldPanel.add(tiles[i][j]);
             }
         }
+        int x = this.field.getPlayerX();
+        int y = this.field.getPlayerY();
+        int numMines = ((Field) field).countMines(x, y);
+        tiles[y][x].setText(String.valueOf(numMines));
+        tiles[y][x].setBorder(BorderFactory.createLineBorder(Color.white));
+        tiles[y][x].setBackground(Color.white);
         add(minefieldPanel, BorderLayout.CENTER);
-
-        updateView("Game started");
     }
 
-    private void handleMove(String direction) {
-        boolean moved = field.movePlayer(direction);
-        if (moved) {
-            updateView("Moved " + direction);
+    @Override
+    public void update(String message) {
+        System.out.println("update being caught");
+        refresh2();
+    }
+
+    public void refresh2() {
+        //get tile where player currently located, countMines and reset text
+        int x = field.getPlayerX();
+        int y = field.getPlayerY();
+
+        System.out.println("x: " + x + " y: " +y);
+
+        if(x == SIZE-1 && y == SIZE-1) {
+            tiles[y][x].setText(":)");
+            tiles[y][x].setBackground(Color.GREEN);
+        }
+        else {
+            int numMines = this.field.getTile(x, y).getNumMines();
+            System.out.println(numMines);
+            tiles[y][x].setText(String.valueOf(numMines));
+            tiles[y][x].setBorder(BorderFactory.createLineBorder(Color.white));
+            tiles[y][x].setBackground(Color.WHITE);
+
+            Tile tile = this.field.getTile(x, y);
+            if (tile != null && tile.getMineStatus()) {
+                tiles[y][x].setBackground(Color.RED);
+            }
         }
     }
 
-    private void updateView(String message) {
-        // Reset grid
+    @Override
+    public void setModel(Model newModel) {
+        super.setModel(newModel);
+
+        System.out.println(field.getPlayerX() + " " + field.getPlayerY());
+
+        initView(newModel);
+        //repaint();
+        refresh2();
+        System.out.println(field.getPlayerX() + " " + field.getPlayerY());
+
+    }
+
+    public void initView(Model newModel) {
+        this.field = (Field) newModel;
+
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                if(field.getTile(i,j).getStepStatus()){
-                    tiles[i][j].setBackground(Color.LIGHT_GRAY);
+                if (this.field.getTile(i,j).getStepStatus()) {
+                    int numMines = ((Field) field).countMines(i, j);
+                    tiles[j][i].setText(String.valueOf(numMines)); //j, i
+                    tiles[j][i].setBorder(BorderFactory.createLineBorder(Color.white));
+                    tiles[j][i].setBackground(Color.white);
+
                 } else {
-                    tiles[i][j].setBackground(Color.DARK_GRAY);
+                    tiles[j][i].setText("?");
+                    tiles[j][i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+                    tiles[j][i].setOpaque(true);
+                    tiles[j][i].setBackground(Color.DARK_GRAY);
                 }
             }
         }
 
-        // Highlight player position
-        int x = field.getPlayerY();
-        int y = field.getPlayerX();
-        tiles[x][y].setBackground(Color.WHITE);
-
-        // If game over, highlight mine
-        Tile tile = field.getTile(x, y);
-        if (tile != null && tile.getMineStatus()) {
-            tiles[x][y].setBackground(Color.RED);
-            JOptionPane.showMessageDialog(this, "Game Over! You hit a mine.");
-        }
-        repaint();
+        int x = this.field.getPlayerX();
+        int y = this.field.getPlayerY();
+        int numMines = ((Field) field).countMines(x, y);
+        tiles[y][x].setText(String.valueOf(numMines));
+        tiles[y][x].setBorder(BorderFactory.createLineBorder(Color.white));
+        tiles[y][x].setBackground(Color.white);
     }
-
-    /*public static void main(String[] args) {
-        Field field = new Field();
-
-        JFrame frame = new JFrame("Mine Field");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 500);
-        frame.setResizable(false);
-
-        FieldView view = new FieldView(field);
-        frame.add(view);
-        frame.setVisible(true);
-    }*/
 }

@@ -7,15 +7,13 @@ import mvc.View;
 
 public class FieldFactory implements AppFactory {
 
-    public Field makeModel() {
+    public Model makeModel() {
+        System.out.println("should make new model");
         return new Field();
     }
 
     public View makeView(Model m) {
-        return new FieldView((Field) m);
-    }
-
-    public FieldView makeView(Field m) {
+        System.out.println("should make new view");
         return new FieldView(m);
     }
 
@@ -25,7 +23,8 @@ public class FieldFactory implements AppFactory {
 
     public String getHelp() {
         return "Click direction buttons to navigate Mine Field \n" +
-                "Try to avoid mines";
+                "Try to avoid mines\n" +
+                "Please extend screen to view buttons";
     }
 
     public String about() {
@@ -38,6 +37,6 @@ public class FieldFactory implements AppFactory {
     }
 
     public Command makeEditCommand(Model field, String direction) { //needs work
-        return new Move((Field) field, direction);
+        return new Move(field, direction);
     }
 }
